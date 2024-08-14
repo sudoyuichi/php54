@@ -1,0 +1,28 @@
+services:
+  web:
+    build: ./web
+    container_name: php54_apache
+    volumes:
+      - ./web/www:/var/www/html
+      - ./web/php.ini:/usr/local/etc/php/php.ini
+    working_dir: /var/www/html
+    ports:
+      - "80:80"
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - APACHE_LOG_DIR=/var/log/apache2
+    command: /usr/sbin/apache2ctl -D FOREGROUND
+
+  mysql:
+    image: mysql:5.6
+    container_name: mysql56
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: testdb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/data:/var/lib/mysql
